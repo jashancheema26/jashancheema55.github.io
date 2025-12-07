@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Monthly Reflection – Pocket Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <h1 class="logo">Pocket Planner</h1>
+
+    <nav class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="reflection.html" class="active">Monthly reflection</a>
+      <a href="yearly.html">Yearly view</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container reflection-page">
+
+  <!-- HERO -->
+  <section class="reflection-hero">
+    <h2>Monthly Reflection</h2>
+    <p class="subtext">
+      A quiet review of how you spent — and how it felt.
+    </p>
+  </section>
+
+  <!-- REFLECTION BLOCKS -->
+  <section class="reflection-block">
+    <h4>What worked well</h4>
+    <p class="subtext">
+      Moments where your spending felt aligned and intentional.
+    </p>
+    <textarea
+      id="workedWell"
+      placeholder="Example: Cooked more at home, avoided impulse buys"
+    ></textarea>
+  </section>
+
+  <section class="reflection-block">
+    <h4>What felt unnecessary</h4>
+    <p class="subtext">
+      Expenses that didn’t add long-term value.
+    </p>
+    <textarea
+      id="unnecessary"
+      placeholder="Example: Late-night online shopping"
+    ></textarea>
+  </section>
+
+  <section class="reflection-block">
+    <h4>One intention for next month</h4>
+    <p class="subtext">
+      Keep it simple. One clear direction is enough.
+    </p>
+    <textarea
+      id="intention"
+      placeholder="Example: Pause before spending on wants"
+    ></textarea>
+  </section>
+
+  <!-- FOOT NOTE -->
+  <section class="reflection-footer">
+    <p class="subtext">
+      These reflections stay personal.  
+      No analysis. No tracking. No judgment.
+    </p>
+
+    <a href="index.html" class="back-link">← Back to overview</a>
+    <!-- Optional tiny save status -->
+    <span id="saveStatus" class="subtext" style="font-size: 0.8rem; margin-left: 8px;"></span>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>© 2025 Pocket Planner · Your data stays local</p>
+</footer>
+
+<!-- ===== AUTO-SAVE SCRIPT FOR MONTHLY REFLECTION ===== -->
+<script>
+  (function () {
+    const STORAGE_PREFIX = "pocketPlanner_monthly_";
+
+    // You can customize this if you add a month picker later
+    function getCurrentMonthKey() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      return year + "-" + month; // e.g., "2025-12"
+    }
+
+    const fields = [
+      { id: "workedWell", key: "workedWell" },
+      { id: "unnecessary", key: "unnecessary" },
+      { id: "intention", key: "intention" },
+    ];
+
+    const saveStatusEl = document.getElementById("saveStatus");
+
+    function showSaved() {
+      if (!saveStatusEl) return;
+      saveStatusEl.textContent = "Saved ✔";
+      clearTimeout(showSaved._timeoutId);
+      showSaved._timeoutId = setTimeout(() => {
+        saveStatusEl.textContent = "";
+      }, 1500);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const monthKey = getCurrentMonthKey();
+
+      fields.forEach(({ id, key }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        const storageKey = STORAGE_PREFIX + monthKey + "_" + key;
+
+        // Load saved value
+        const saved = localStorage.getItem(storageKey);
+        if (saved !== null) {
+          el.value = saved;
+        }
+
+        // Auto-save on input
+        el.addEventListener("input", () => {
+          localStorage.setItem(storageKey, el.value);
+          showSaved();
+        });
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

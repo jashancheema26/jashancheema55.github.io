@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pocket Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!-- NAVBAR – SAME LINKS AS INDEX -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">Pocket Planner</div>
+      <nav class="nav-links">
+        <a href="home.html" class="nav-link active">Home</a>
+        <a href="index.html" class="nav-link">Overview</a>
+        <a href="reflection.html" class="nav-link">Monthly reflection</a>
+        <a href="yearly.html" class="nav-link">Yearly view</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN HERO + METER -->
+  <main class="home-shell">
+    <!-- LEFT: text -->
+    <section class="home-hero-left">
+      <h1>Be aware of<br />your money.</h1>
+
+      <p>
+        Pocket Planner helps you pause, reflect, and make intentional
+        decisions about your spending — without stress or complexity.
+      </p>
+
+      <a href="index.html" class="home-primary-btn">
+        Go to overview →
+      </a>
+    </section>
+
+    <!-- RIGHT: savings meter -->
+    <aside class="home-meter-card">
+      <div class="home-meter-rail">
+        <div id="homeMeterFill" class="home-meter-fill"></div>
+        <div id="homeMeterIntent" class="home-meter-intent"></div>
+      </div>
+
+      <h4 class="home-meter-title">Available Balance</h4>
+      <div id="homeBalance" class="home-meter-amount">₹0</div>
+      <p class="home-meter-note">
+        Awareness begins by noticing this number.
+      </p>
+    </aside>
+  </main>
+
+  <!-- HOME PAGE JS ONLY -->
+  <script>
+    document.addEventListener("DOMContentLoaded", loadHomeMeter);
+
+    async function loadHomeMeter() {
+      const balanceEl = document.getElementById("homeBalance");
+      const fillEl = document.getElementById("homeMeterFill");
+      const intentEl = document.getElementById("homeMeterIntent");
+
+      if (!balanceEl || !fillEl || !intentEl) return;
+
+      try {
+        // 1) Get data from backend
+        const res = await fetch("http://localhost:5000/api/summary");
+        const data = await res.json();
+
+        const balance = Number(data.balance) || 0;
+        const storedIntent = Number(localStorage.getItem("monthlyIntent"));
+        const monthlyIntent = storedIntent > 0 ? storedIntent : 100000;
+
+        // 2) Set balance text
+        balanceEl.textContent = "₹" + balance.toLocaleString();
+
+        // 3) Percent of intent (0–100)
+        let percent = (balance / monthlyIntent) * 100;
+        percent = Math.max(0, Math.min(percent, 100));
+
+        // 4) Animate fill
+        requestAnimationFrame(() => {
+          fillEl.style.height = percent + "%";
+        });
+
+        // 5) Color by health
+        if (percent < 30) {
+          fillEl.style.background =
+            "linear-gradient(180deg, #dc2626, #991b1b)"; // red
+        } else if (percent < 60) {
+          fillEl.style.background =
+            "linear-gradient(180deg, #f59e0b, #b45309)"; // amber
+        } else {
+          fillEl.style.background =
+            "linear-gradient(180deg, #0a66c2, #084b8a)"; // blue
+        }
+
+        // 6) Monthly intent line (always at 100% marker)
+        intentEl.style.bottom = "100%";
+
+      } catch (err) {
+        console.warn("Home meter load failed:", err);
+        balanceEl.textContent = "₹0";
+        fillEl.style.height = "0%";
+        fillEl.style.background =
+          "linear-gradient(180deg, #9ca3af, #6b7280)";
+      }
+    }
+  </script>
+
+</body>
+
+</html>

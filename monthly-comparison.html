@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Monthly Comparison – Pocket Planner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+body {
+  background: #f5f5f7;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #111;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  border: 1px solid #e5e5ea;
+}
+
+.card h4 {
+  margin-bottom: 12px;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.amount {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Monthly Comparison</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h4>Last Month Balance</h4>
+      <div class="amount" id="prevBalance">—</div>
+    </div>
+
+    <div class="card">
+      <h4>This Month Balance</h4>
+      <div class="amount" id="currBalance">—</div>
+    </div>
+
+    <div class="card">
+      <h4>Spending Change</h4>
+      <div class="amount" id="spendDiff">—</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const STORAGE_KEY = "pp_monthlyData";
+
+  function getMonthKey(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+  }
+
+  const now = new Date();
+  const currMonth = getMonthKey(now);
+
+  const prev = new Date(now);
+  prev.setMonth(prev.getMonth() - 1);
+  const prevMonth = getMonthKey(prev);
+
+  const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+  const curr = data[currMonth] || {};
+  const last = data[prevMonth] || {};
+
+  function balance(d) {
+    return (d.income || 0) - (d.spending || 0);
+  }
+
+  document.getElementById("currBalance").textContent =
+    "₹" + balance(curr);
+
+  document.getElementById("prevBalance").textContent =
+    last ? "₹" + balance(last) : "—";
+
+  document.getElementById("spendDiff").textContent =
+    last.spending !== undefined
+      ? "₹" + ((curr.spending || 0) - (last.spending || 0))
+      : "—";
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Yearly View – Pocket Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <h1 class="logo">Pocket Planner</h1>
+
+    <nav class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="reflection.html">Monthly reflection</a>
+      <a href="yearly.html" class="active">Yearly view</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container yearly-page">
+
+  <!-- HERO -->
+  <section class="yearly-hero">
+    <h2>Year in Perspective</h2>
+    <p class="subtext">
+      A calm review of how money supported — or distracted from — your life.
+    </p>
+  </section>
+
+  <!-- YEAR SNAPSHOT -->
+  <section class="yearly-snapshot">
+    <p class="subtext">
+      This year wasn’t about perfection.  
+      It was about awareness, adjustment, and restraint.
+    </p>
+  </section>
+
+  <!-- REFLECTION BLOCKS -->
+  <section class="yearly-block">
+    <h4>What you handled well</h4>
+    <p class="subtext">
+      Financial decisions or habits that served you.
+    </p>
+    <!-- added data-key only -->
+    <textarea
+      data-key="yearly_handled_well"
+      placeholder="Example: Controlled lifestyle inflation, avoided debt"></textarea>
+  </section>
+
+  <section class="yearly-block">
+    <h4>What cost more than expected</h4>
+    <p class="subtext">
+      Expenses that quietly added pressure.
+    </p>
+    <!-- added data-key only -->
+    <textarea
+      data-key="yearly_cost_more"
+      placeholder="Example: Convenience spending, subscriptions"></textarea>
+  </section>
+
+  <section class="yearly-block">
+    <h4>What you’d do differently next year</h4>
+    <p class="subtext">
+      One or two changes — not a complete overhaul.
+    </p>
+    <!-- added data-key only -->
+    <textarea
+      data-key="yearly_do_different"
+      placeholder="Example: Build a buffer before upgrading lifestyle"></textarea>
+  </section>
+
+  <!-- YEARLY TAKEAWAY -->
+  <section class="yearly-takeaway">
+    <h4>Your single takeaway</h4>
+    <p class="subtext">
+      If you remember only one thing from this year, let it be this.
+    </p>
+    <!-- added data-key only -->
+    <input
+      data-key="yearly_takeaway"
+      type="text"
+      placeholder="Example: Spend slower than income grows">
+  </section>
+
+  <!-- FOOTER NOTE -->
+  <section class="yearly-footer">
+    <p class="subtext">
+      Progress compounds quietly.
+      Wealth is built in reflection, not reaction.
+    </p>
+
+    <a href="index.html" class="back-link">← Back to overview</a>
+  </section>
+
+  <!-- added: subtle autosave status text -->
+  <p class="subtext autosave-status">
+    Saved automatically
+  </p>
+
+</main>
+
+<footer class="footer">
+  <p>© 2025 Pocket Planner · Your data stays local</p>
+</footer>
+
+<!-- added: auto-save script (localStorage only) -->
+<script>
+  const fields = document.querySelectorAll("[data-key]");
+  const status = document.querySelector(".autosave-status");
+
+  fields.forEach(field => {
+    const key = field.dataset.key;
+
+    // Load saved value if exists
+    const saved = localStorage.getItem(key);
+    if (saved) field.value = saved;
+
+    // Auto-save on input
+    field.addEventListener("input", () => {
+      localStorage.setItem(key, field.value);
+
+      if (status) {
+        status.textContent = "Saved automatically";
+        status.style.opacity = "1";
+
+        clearTimeout(window._yearlySaveTimer);
+        window._yearlySaveTimer = setTimeout(() => {
+          status.style.opacity = "0.6";
+        }, 1500);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pocket Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ✅ FIXED CSS PATH -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  
+
+<header class="nav">
+  <div class="nav-inner">
+    <h1 class="logo">Pocket Planner</h1>
+
+    <nav class="nav-links">
+       <a href="home.html">Home</a>
+      <a href="index.html">Overview</a>
+      <a href="reflection.html">Monthly reflection</a>
+      <a href="yearly.html">Yearly view</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- DASHBOARD -->
+  <section id="overview" class="cards">
+    <div class="card">
+      <h3>Total Income</h3>
+      <p id="income" class="stat">₹0</p>
+    </div>
+
+    <div class="card">
+      <h3>Total Spending</h3>
+      <p id="expense" class="stat">₹0</p>
+    </div>
+<div class="card highlight">
+  <h3>Available Balance</h3>
+  <p id="balance" class="stat">₹0</p>
+
+  <p class="subtext">
+    Awareness begins by noticing this number.
+  </p>
+
+  <!-- ✅ CLEAR BALANCE BUTTON -->
+  <button
+    id="clearBalanceBtn"
+    class="clear-btn"
+    type="button">
+    Clear balance
+  </button>
+</div>
+
+  </section>
+
+  <!-- MONTHLY INTENT -->
+  <section class="card">
+    <h3>Monthly Intent</h3>
+    <p id="goalText" class="subtext">
+      An amount you choose to protect — quietly and consistently.
+    </p>
+
+    <input id="goalInput" type="number" placeholder="Set your intent (₹)" />
+    <button id="saveGoalBtn" type="button">Save intent</button>
+  </section>
+
+  <!-- FORMS -->
+  <section class="forms">
+
+    <form id="incomeForm" class="panel">
+      <h4>Log income</h4>
+      <p class="subtext">Record money as it enters your life.</p>
+
+      <input id="incomeAmount" type="number" placeholder="Amount" required />
+      <input id="incomeSource" type="text"
+        placeholder="Source (Pocket money, Salary…)" required />
+
+      <button type="submit">Record</button>
+    </form>
+
+    <form id="expenseForm" class="panel">
+      <h4>Record spending</h4>
+      <p class="subtext">Not to judge — only to understand.</p>
+
+      <input id="expenseAmount" type="number" placeholder="Amount" required />
+
+      <select id="expenseCategory" required>
+        <option value="">Category</option>
+        <option>Food</option>
+        <option>Travel</option>
+        <option>Shopping</option>
+        <option>Other</option>
+      </select>
+
+      <input id="expenseNote" type="text" placeholder="Optional note" />
+
+      <button type="submit">Record</button>
+    </form>
+
+  </section>
+
+  <!-- EXPENSE LIST -->
+  <section class="expenses">
+    <div class="expenses-header">
+      <h3>Your recent spending</h3>
+
+      <select id="filterCategory">
+        <option value="all">All</option>
+        <option>Food</option>
+        <option>Travel</option>
+        <option>Shopping</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Amount</th>
+          <th>Category</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody id="expenseTable"></tbody>
+    </table>
+
+    <p class="subtext" style="margin-top:12px;">
+      Awareness matters more than complex analytics.
+    </p>
+  </section>
+
+</main>
+<!-- Clear Balance Modal -->
+<div id="clearModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3>Clear balance?</h3>
+    <p>
+      This will remove all income and spending.<br />
+      Monthly intent will stay safe.
+    </p>
+
+    <div class="modal-actions">
+      <button id="cancelClear" class="btn-secondary">Cancel</button>
+      <button id="confirmClear" class="btn-danger">Clear</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<footer class="footer">
+  <p>© 2025 Pocket Planner · Your data stays local</p>
+</footer>
+
+<div id="toast" class="toast">Saved</div>
+
+<!-- ✅ MONTH AUTO-CLOSE (ADDED, SAFE) -->
+<script src="js/monthManager.js"></script>
+
+<!-- ✅ YOUR EXISTING LOGIC (UNCHANGED) -->
+<script src="js/script.js"></script>
+
+</body>
+
+<!-- Clear Balance Modal -->
+<div class="modal-overlay" id="clearModal">
+  <div class="modal">
+    <h3>Clear balance?</h3>
+    <p>
+      This will remove all income and spending.<br />
+      Monthly intent will stay safe.
+    </p>
+
+    <div class="modal-actions">
+      <button id="cancelClear" class="btn-secondary">Cancel</button>
+      <button id="confirmClear" class="btn-danger">Clear</button>
+    </div>
+  </div>
+</div>
+
+</html>
